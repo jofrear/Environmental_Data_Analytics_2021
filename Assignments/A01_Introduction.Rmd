@@ -22,21 +22,21 @@ The completed exercise is due on <>.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer: I completed Intro to Stats last year with John Poulsen, which used R almost exclusively. We handled some data sets there, especially with the final project, which had a very messy data set. There are a lot of other parts of data analytics that I will be a novice about and I'm looking forward to learning! I'm also new to Git.
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: 
+> Answer: Using R, simple coding. 
 
 3. Are there any components of the course about which you feel apprehensive?
 
-> Answer: 
+> Answer: Not really - maybe GitHub a bit.
 
 
 ## 2) GitHub
 
 Provide a link below to your forked course repository in GitHub. Make sure you have pulled all recent changes from the course repository  and that you have updated your course README file. 
 
-> Answer: 
+> Answer: https://github.com/jofrear/Environmental_Data_Analytics_2021.git
 
 
