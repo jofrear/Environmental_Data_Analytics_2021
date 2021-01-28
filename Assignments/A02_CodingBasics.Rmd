@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2: Coding Basics"
-author: "Student Name"
+author: "Joshua Frear"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -31,11 +31,16 @@ This exercise accompanies the lessons in Environmental Data Analytics on coding 
 4. Insert comments in your code to describe what you are doing.
 
 ```{r}
-#1. 
+#Question 1. seq() can take 3 arguments, including the increment by which to increase.
+seq_one <- seq(1,100,4)
+seq_one
 
-#2. 
+#Question 2. calculating the mean and median of the sequence from 1
+mean(seq_one)
+median(seq_one)
 
-#3. 
+#Question 3. ">" runs a True/False test on the expression.
+mean(seq_one) > median(seq_one)
 
 ```
 
@@ -50,21 +55,47 @@ This exercise accompanies the lessons in Environmental Data Analytics on coding 
 8. Label the columns of your data frame with informative titles.
 
 ```{r}
+#text vector for student names
+student_names <- c("Abe", "Beth", "Donald", "Toni")
+#integer vector for test scores
+student_scores <- c(95, 82, 49, 98)
+#logical vector for whether a student passed
+student_passing <- c(TRUE, TRUE, FALSE, TRUE)
+
+student_records_df <- data.frame("Name"=student_names, 
+  "Test_Score"=student_scores, "Passing"=student_passing)
 
 ```
 
 9. QUESTION: How is this data frame different from a matrix?
 
-> Answer: 
+> Answer: It has non-numeric columns, including one with text values and one with logical values.
 
 10. Create a function with an if/else statement. Your function should determine whether a test score is a passing grade of 50 or above (TRUE or FALSE). You will need to choose either the `if` and `else` statements or the `ifelse` statement. Hint: Use `print`, not `return`. The name of your function should be informative.
 
 11. Apply your function to the vector with test scores that you created in number 5. 
 
 ```{r}
+#trying a function with if() and else
+check_pass <- function(x){
+  if(x >= 50) {
+    print(TRUE)
+  }
+  else{
+    print(FALSE)
+  }
+  
+  
+}
+#trying a function with ifelse()
+check_pass_ifelse <-function(x){
+  ifelse(x >= 50, TRUE, FALSE)
+}
+#running the ifelse function on student_scores from before
+check_pass_ifelse(student_scores)
 
 ```
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer: 
+> Answer: 'ifelse' worked with all four students. 'if' did not work, because apparently it is not set up to handle vectors by default, so it only returned the answer for the first item in the vector. I did not expect this!
