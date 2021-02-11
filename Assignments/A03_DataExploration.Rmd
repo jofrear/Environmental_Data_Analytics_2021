@@ -69,6 +69,9 @@ summary(Neonics$Effect)
 #of how frequent different effects are.
 count(Neonics, Effect)
 
+#note after lab from John Fay in class: to use summary, need to import a csv
+#in R 4.0 with the command stringsasfactors = TRUE
+
 ```
 
 > Answer: Mortality and Population are the most common. Mortality makes sense - we are studying poisons and want to see if organism death results or not. Population is defined in the supplemental document on pg 94 as "measurements and endpoints relating to a group of organisms or plants of the same species occupying the same area at a given time." This description is somewhat vague, suggesting that a lot of different experiments could fall into this category.
