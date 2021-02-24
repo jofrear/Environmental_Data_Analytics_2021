@@ -147,7 +147,7 @@ EPAair_tidy <-
 dim(EPAair_tidy)
 
 #11
-write.csv(EPAair_tidy, "../Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
+write.csv(EPAair_tidy, "../Data/Processed/EPAair_O3_PM25_NC1819_Processed_A04.csv")
 ```
 
 
