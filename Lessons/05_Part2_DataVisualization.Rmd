@@ -38,11 +38,11 @@ Often, we will want to change multiple visual aspects of a plot. Ggplot comes wi
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 O3plot <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) 
-print(O3plot)
+print(O3plot) 
 
 O3plot1 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_gray()
+  theme_gray() #default
 print(O3plot1)
 
 O3plot2 <- ggplot(EPAair) +
@@ -71,7 +71,7 @@ If you would like to set a common theme across all plots in your analysis sessio
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 mytheme <- theme_classic(base_size = 14) +
-  theme(axis.text = element_text(color = "black"), 
+  theme(axis.text = element_text(color = "blue"), 
         legend.position = "top") #alternative: legend.position + legend.justification
 
 # options: call the theme in each plot or set the theme at the start. 
@@ -177,7 +177,7 @@ NvsP2 <-
   geom_point(alpha = 0.7, size = 2.5) +
   #labs() + # change your legend labels here
   scale_shape_manual(values = c(15, 17)) +
-  #scale_color_distiller(palette = "Blues", direction = 1) + # use scale_color_brewer for discrete variables
+  scale_color_distiller(palette = "Blues", direction = 1) + # use scale_color_brewer for discrete variables
   scale_color_viridis(option = "magma", direction = -1) +
   theme(legend.position = "right", 
         legend.text = element_text(size = 12), legend.title = element_text(size = 12))
