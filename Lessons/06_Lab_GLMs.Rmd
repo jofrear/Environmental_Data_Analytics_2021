@@ -24,7 +24,7 @@ PeterPaul.chem.nutrients <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_N
 # Set date to date format
 PeterPaul.chem.nutrients$sampledate <- as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d")
 
-EPAair <- read.csv("./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv", stringsAsFactors = TRUE)
+EPAair <- read.csv("./Data/Processed/EPAair_O3_PM25_NC1819_Processed_A04.csv", stringsAsFactors = TRUE)
 # Set date to date format
 EPAair$Date <- as.Date(EPAair$Date, format = "%Y-%m-%d")
 
@@ -67,11 +67,11 @@ Are Ozone levels below the threshold for "good" AQI index (0-50)?
 > Exercise 1: State the hypotheses for testing mean of AQI index.
 
 > Answer: 
+H0: mu >= 50 ppm
+Ha: mu < 50 ppm
 
 
 ```{r}
-
-
 summary(EPAair$Ozone)
 EPAair.subsample <- sample_n(EPAair, 5000)
 
@@ -149,7 +149,7 @@ Create three plots, each with appropriately formatted axes and legends. Choose a
 
 ```{r}
 #Exercise 2:
-
+ggplot()
 
 ```
 
@@ -160,15 +160,13 @@ Important components of the linear regression are the correlation and the R-squa
 For the NTL-LTER dataset, can we predict PM2.5 from Ozone?
 
 ```{r}
-
 #Exercise 3: Run a linear regression PM2.5 by Ozone. Find the p-value and R-squared value. 
-
-
+Air_model <- lm(data = EPAair, formula = PM2.5 ~ Ozone)
+summary(Air_model)
 
 #Exercise 4: Build a scatterplot. Add a line and standard error for the linear regression. Add the regression equation to the plot
-
-
-
+Air_mod_plot <- ggplot(data = EPAair, aes(x = Ozone, y = PM2.5)) + geom_point() + geom_smooth(method = "lm")
+print(Air_mod_plot)
 ```
 
 
@@ -177,23 +175,28 @@ For the NTL-LTER dataset, can we predict PM2.5 from Ozone?
 What other variables can we add to improve model?
 
 ```{r}
-
 #Exercise 5: Build correlation plots and identify more possible explanatory variables to add to the regression.
+library(corrplot)
+Airvars <- 
+  EPAair %>%
+  select(meanlatitude:Ozone) %>%
+  na.omit()
+EPAairCorr <- cor(Airvars)
+corrplot(EPAairCorr, method = "ellipse")
+corrplot.mixed(EPAairCorr, upper = "ellipse")
 
-
-
+#maybe add meanlatitude
 
 #Exercise 6: Choose a model by AIC in a Stepwise Algorithm. Do the results from AIC match the variables you selected on Exercise 5?
 
+Ozone.mod.full <- lm(data = EPAair, PM2.5 ~ Ozone + Year + Month + meanlongitude + meanlatitude)
+summary(Ozone.mod.full)
+step(Ozone.mod.full)
 
 
-
-#Exercise 7: Run another regression using the variables selected on Exercise 6. Compare r-squared value withthe one from Exercise 5. 
-
+#Exercise 7: Run another regression using the variables selected on Exercise 6. Compare r-squared value with the one from Exercise 5. 
+Ozone.mod.best <- lm(formula = PM2.5 ~ Ozone + Month + meanlongitude + meanlatitude, 
+    data = EPAair)
+summary(Ozone.mod.best)
+#Ex3 R-squared = 0.1316, Ex7 R-squared = 0.1926
 ```
-
-
-
-
-
-

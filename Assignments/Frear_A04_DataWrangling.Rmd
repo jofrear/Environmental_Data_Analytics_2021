@@ -87,6 +87,7 @@ PM25_NC2019.processed <-
 #5
 PM25_NC2018.processed$AQS_PARAMETER_DESC = "PM2.5"
 PM25_NC2019.processed$AQS_PARAMETER_DESC = "PM2.5"
+#note from grader, you can use mutate as well: EPAair.PM25.NC2019.Processed %>% mutate(AQS_PARAMETER_DESC = "PM2.5"). 
 
 #6
 write.csv(Ozone_NC2018.processed, 
