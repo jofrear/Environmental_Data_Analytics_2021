@@ -65,11 +65,25 @@ See: <https://rmarkdown.rstudio.com> and class recording.
 
 <Fill in our discussion below with bullet points. Use italics and bold for emphasis (hint: use the cheat sheets or `Help` →`Markdown Quick Reference` to figure out how to make bold and italic text).> 
 
+* Easy to organize
+* Ability to format
+* Can mix **code** and **text**
+* Less clunky
+* Reproducible
+* Version Control (vs *Word* or *Excel*)
+* Knit into various formats
+
+
 
 ## TEXT EDITING CHALLENGE
 
 Create a table below that details the example datasets we have been using in class. The first column should contain the names of the datasets and the second column should include some relevant information about the datasets. (Hint: use the cheat sheets to figure out how to make a table in Rmd)
 
+| Dataset     | Description |
+| ----------- | ----------- |
+| Ozone       | Time series data of ozone concentrations in Garinger |
+| NTL-LTER    | Data from Peter and Paul Lakes LTER sites |
+| NIWO_Litter | Litterfall data from NEON NIWO site |
 
 ## R CHUNK EDITING CHALLENGE
 
@@ -77,6 +91,10 @@ Create a table below that details the example datasets we have been using in cla
 
 Create an R chunk below that installs the package `knitr`. Instead of commenting out the code, customize the chunk options such that the code is not evaluated (i.e., not run).
 
+```{r install.packages, eval = FALSE}
+install.packages("knitr")
+
+```
 
 ### Setup
 
@@ -85,6 +103,23 @@ Create an R chunk below called "setup" that checks your working directory, loads
 Load the NTL-LTER_Lake_Nutrients_Raw dataset, display the head of the dataset, and set the date column to a date format.
 
 Customize the chunk options such that the code is run but is not displayed in the final document.
+
+```{r setup, include = FALSE, echo=FALSE}
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE)
+getwd()
+library(tidyverse)
+library(lubridate)
+library(knitr)
+
+NTL_LTER_Lake_Nutrients_Raw <- read.csv("../Data/Raw/NTL-LTER_Lake_Nutrients_Raw.csv")
+
+head(NTL_LTER_Lake_Nutrients_Raw)
+
+NTL_LTER_Lake_Nutrients_Raw$sampledate <- as.Date(NTL_LTER_Lake_Nutrients_Raw$sampledate, "%m/%d/%y")
+```
+
 
 
 ### Data Exploration, Wrangling, and Visualization
@@ -101,11 +136,58 @@ Create a third R chunk that uses the function `kable` in the knitr package to di
 
 Create a fourth and fifth R chunk that generates two plots (one in each chunk): one for total N over time with different colors for each lake, and one with the same setup but for total P. Decide which geom option will be appropriate for your purpose, and select a color palette that is visually pleasing and accessible. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, customize the chunk options such that the figures are aligned on the left side of the page. Lastly, add a fig.cap chunk option to add a caption (title) to your plot that will display underneath the figure.
 
+```{r}
+
+NTL_LTER_Lake_Nutrients_Raw <- NTL_LTER_Lake_Nutrients_Raw %>% 
+    select(lakename:sampledate,depth:po4) %>% 
+    filter(depth == 0) %>% 
+    drop_na()
+```
+
+```{r include=FALSE}
+
+Lake_Nitrogen <- NTL_LTER_Lake_Nutrients_Raw %>% 
+    group_by(lakename) %>% 
+    summarize(mean(tn_ug), min(tn_ug), max(tn_ug), sd(tn_ug))
+
+Lake_Phosphorus <- NTL_LTER_Lake_Nutrients_Raw %>% 
+    group_by(lakename) %>% 
+    summarize(mean(tp_ug), min(tp_ug), max(tp_ug), sd(tp_ug))
+```
+
+```{r echo=FALSE}
+
+kable(Lake_Nitrogen, caption = "Total Nitrogen, by Lake")
+kable(Lake_Phosphorus, caption = "Total Phosphorus, by Lake")
+
+```
+
+Create a fourth and fifth R chunk that generates two plots (one in each chunk): one for total N over time with different colors for each lake, and one with the same setup but for total P. Decide which geom option will be appropriate for your purpose, and select a color palette that is visually pleasing and accessible. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, customize the chunk options such that the figures are aligned on the left side of the page. Lastly, add a fig.cap chunk option to add a caption (title) to your plot that will display underneath the figure.
+
+
+```{r echo=FALSE, fig.cap="Total Nitrogen (ppm)", fig.align='left'}
+
+ggplot(NTL_LTER_Lake_Nutrients_Raw, aes(x = sampledate, y = tn_ug, color = lakename)) + geom_point() + labs(x = "Sample Date", y = "Nitrogen", color = "Lake")
+
+```
+
+```{r echo=FALSE, fig.cap="Total Phosphorus (ppm)", fig.align='left'}
+
+ggplot(NTL_LTER_Lake_Nutrients_Raw, aes(x = sampledate, y = tp_ug, color = lakename)) + geom_point() + labs(x = "Sample Date", y = "Phosphorus", color = "Lake")
+
+```
+
+\newpage
 
 ### Communicating results
 
 Write a paragraph describing your findings from the R coding challenge above. This should be geared toward an educated audience but one that is not necessarily familiar with the dataset. Then insert a horizontal rule below the paragraph. Below the horizontal rule, write another paragraph describing the next steps you might take in analyzing this dataset. What questions might you be able to answer, and what analyses would you conduct to answer those questions?
 
+Phosphorus and Nitrogen have been increasing in the lakes sampled over the course of the study period, with a spike in 1996.
+
+---------------------------------------------------------
+
+Next steps of analysis could include running a time series analysis on each lake to see if there is a trend. 
 
 ## KNIT YOUR PDF
 When you have completed the above steps, try knitting your PDF to see if all of the formatting options you specified turned out as planned. This may take some troubleshooting.

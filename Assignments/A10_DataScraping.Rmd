@@ -1,6 +1,6 @@
 ---
 title: "Assignment 10: Data Scraping"
-author: "Student Name"
+author: "Joshua Frear"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 

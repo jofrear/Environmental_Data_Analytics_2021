@@ -15,6 +15,9 @@ editor_options:
  * Why location is important? 
  * Vector data model: points/lines/polygons
  * Spatial data structures: sfg, sfc, sf objects
+      sf = spatial features object
+      sfc = spatial feature column in sf
+      sfg = one row of the sfc
  * Projections & Coordinate reference systems
  * Visualization techniques
 
@@ -32,8 +35,11 @@ getwd()
 
 #Import libraries
 library(tidyverse)
+#install.packages("sf")
 library(sf)
+#install.packages("leaflet")
 library(leaflet)
+#install.packages("mapview")
 library(mapview)
 library(RColorBrewer)
 ```
@@ -80,11 +86,10 @@ mapView(counties_sf, zcol = "AWATER")
 
 ```{r read HUCs shapefile}
 #Read the shapefile into an sf dataframe named "huc8_sf"
-
-
+huc8_sf <- st_read('./Data/Spatial/NCHUC8.shp')
 
 #View the data as a map, colored by the acreage in each
-
+mapview(huc8_sf, zcol = "ACRES")
 
 ```
 
@@ -94,11 +99,12 @@ mapView(counties_sf, zcol = "AWATER")
 
 ```{r Select the Upper Neuse HUC 8}
 #Read the shapefile into an sf dataframe
-
-
+neuse_sf <- st_read('./Data/Spatial/NCHUC8.shp') %>% 
+  filter(SUBBASIN == "Upper Neuse")
 
 #Create a map
-
+mapview(huc8_sf, col.region = "orange") + 
+  mapview(neuse_sf, col.region = "purple")
 
 ```
 
@@ -114,19 +120,22 @@ The URL '<https://raw.githubusercontent.com/ENV859/EnviroAtlasData/main/Wind_Ene
 
 ```{r}
 #Compute HUC8 wind energy
+wind_energy <- read.csv('https://raw.githubusercontent.com/ENV859/EnviroAtlasData/main/Wind_Energy.csv', colClasses = c('HUC_12' = 'factor'))
 
 
+summary(wind_energy)
+#wind_energy$huc8 <- substring(wind_energy$HUC_12, first = 1, last = 8)
 
+windE_grouped <- wind_energy %>% 
+  mutate(HUC_8 = substring(HUC_12, first = 1, last = 8)) %>% 
+  group_by(HUC_8) %>% 
+  summarize(kWhkm2day_mean = mean(kWhkm2day))
 
 #Join to HUC_8 features
-
-
-
+huc8_sf_wind <- huc8_sf %>% left_join(windE_grouped, by = c('HUC_8'))
 
 #View the outputs
-
-
-
+mapview(huc8_sf_wind, zcol = "kWhkm2day_mean")
 ```
 
 ### EXERCISE 3.1.2: Data aggregation
